@@ -38,12 +38,13 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Метод для валидации. Вызывается при создании и обновлении."""
-
         all_subj = Advertisement.objects.filter(creator=self.context["request"].user)\
             .filter(status='OPEN').count() + 1
         print(f'ALL SUBJ {all_subj}')
-        if all_subj > 10:
-            raise ValidationError('Слишком много активных объявлений!')
+        if data['status'] == 'OPEN':
+            if all_subj > 10:
+                raise ValidationError('Слишком много активных объявлений!')
 
         return data
+
 
